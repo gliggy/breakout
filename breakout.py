@@ -17,22 +17,25 @@ surface = pygame.display.set_mode((710,500))
 font = pygame.font.SysFont('Tahoma', 60, True, False)
   
 # Initialing Color 
-red = (255,0,0)
-orange = (255,128,0)
-yellow = (255,255,0)
-green = (0,255,0)
-blue = (0,0,255)
-violet = (191,0,255) 
+red    = [[255,0,0],[0]]
+orange = [[255,128,0],[0]]
+yellow = [[255,255,0],[0]]
+green  = [[0,255,0],[0]]
+blue   = [[0,0,255],[0]]
+violet = [[191,0,255],[0]] 
 
 def make_bricks(height, color, number):
-    count = 0
     left = 10
+    color_changer = color[1][0]
     for x in number:
         if x == 1:
-            pygame.draw.rect(surface, color, pygame.Rect(left, height, 60, 30))
+            pygame.draw.rect(surface, color[0], pygame.Rect(left, height, 60, 30))
+            color_changer += 1
+            # print(color[color_changer])
         else:
             pygame.draw.rect(surface, (0,0,0), pygame.Rect(left, height, 60, 30))
         left += 70
+    color_changer = 0
         
 
 def make_paddle(x_pos_new, x_pos_old):
@@ -67,12 +70,12 @@ while not done:
     # Drawing Bricks 
     brick_pos_y = [10,50,90,130,170,210]
     
-    red_array    = [1,1,1,1,0,1,1,1,1,1]
-    orange_array = [1,1,1,1,0,1,1,1,1,1]
+    red_array    = [1,1,1,1,1,1,1,1,1,1]
+    orange_array = [1,1,1,1,1,1,1,1,1,1]
     yellow_array = [1,1,1,1,1,1,1,1,1,1]
-    green_array  = [1,1,1,0,1,1,1,1,1,1]
-    blue_array   = [1,1,1,1,1,1,0,1,1,1]
-    violet_array = [1,1,0,1,1,1,1,1,1,1]
+    green_array  = [1,1,1,1,1,1,1,1,1,1]
+    blue_array   = [1,1,1,1,1,1,1,1,1,1]
+    violet_array = [1,1,1,1,1,1,1,1,1,1]
     
     
     make_bricks(brick_pos_y[0], red, red_array)
