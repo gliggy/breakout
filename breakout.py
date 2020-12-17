@@ -2,6 +2,7 @@
 import pygame 
 import sys
 import random
+import math
   
 # Initializing Pygame 
 pygame.init() 
@@ -46,8 +47,17 @@ def make_ball(x_pos_new, x_pos_old, y_pos_new, y_pos_old):
 paddle_pos = 355
 ball_pos_x = 355
 ball_pos_y = 250
-x = random.choice([-3,3])
-y = random.randint(0,10)
+
+x = 0
+y = 0
+speed = 5
+
+def pick_direction():
+    angle = random.random()*math.pi*2
+    x = math.cos(angle)*speed
+    y = abs(math.sin(angle)*speed)
+    return [x,y]
+[x,y] = pick_direction()
 
 # set lives and score
 lives = 5
@@ -85,8 +95,7 @@ while not done:
             pygame.draw.circle(surface, (0,0,0), (ball_pos_x, ball_pos_y), 20)
             ball_pos_x = 355
             ball_pos_y = 250
-            x = random.choice([-3,3])
-            y = random.randint(1,10)
+            [x,y] = pick_direction()
     
     if ball_pos_y - 20 < 0:
         y = -y
