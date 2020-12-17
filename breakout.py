@@ -17,25 +17,26 @@ surface = pygame.display.set_mode((710,500))
 font = pygame.font.SysFont('Tahoma', 60, True, False)
   
 # Initialing Color 
-red    = [[255,0,0],[0]]
-orange = [[255,128,0],[0]]
-yellow = [[255,255,0],[0]]
-green  = [[0,255,0],[0]]
-blue   = [[0,0,255],[0]]
-violet = [[191,0,255],[0]] 
+red    = [255,0,0,255]
+orange = [255,128,0,255]
+yellow = [255,255,0,255]
+green  = [0,255,0,255]
+blue   = [0,0,255,255]
+violet = [191,0,255,255] 
 
 def make_bricks(height, color, number):
     left = 10
-    color_changer = color[1][0]
+    color_original = color[2]
+    direction = 1 if color_original == 0 else -1
     for x in number:
         if x == 1:
-            pygame.draw.rect(surface, color[0], pygame.Rect(left, height, 60, 30))
-            color_changer += 1
+            pygame.draw.rect(surface, color, pygame.Rect(left, height, 60, 30))
+            color[2] = (color[2] + direction * 10) % 256;
             # print(color[color_changer])
         else:
             pygame.draw.rect(surface, (0,0,0), pygame.Rect(left, height, 60, 30))
         left += 70
-    color_changer = 0
+    color[2] = color_original
         
 
 def make_paddle(x_pos_new, x_pos_old):
@@ -43,6 +44,8 @@ def make_paddle(x_pos_new, x_pos_old):
     pygame.draw.rect(surface, (255,255,0), pygame.Rect(x_pos_new - 55, 480, 110, 10))
 
 def make_ball(x_pos_new, x_pos_old, y_pos_new, y_pos_old):
+    pixel = surface.get_at((int(x_pos_new), int(y_pos_new)))
+    # print(pixel)
     pygame.draw.circle(surface, (0,0,0), (x_pos_old, y_pos_old), 20)
     pygame.draw.circle(surface, (255,255,0), (x_pos_new, y_pos_new), 20)
 
@@ -70,14 +73,16 @@ while not done:
     # Drawing Bricks 
     brick_pos_y = [10,50,90,130,170,210]
     
-    red_array    = [1,1,1,1,1,1,1,1,1,1]
-    orange_array = [1,1,1,1,1,1,1,1,1,1]
-    yellow_array = [1,1,1,1,1,1,1,1,1,1]
-    green_array  = [1,1,1,1,1,1,1,1,1,1]
-    blue_array   = [1,1,1,1,1,1,1,1,1,1]
-    violet_array = [1,1,1,1,1,1,1,1,1,1]
+    colorArrays = [[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1]]
+    red_array    = colorArrays[0]
+    orange_array = colorArrays[1]
+    yellow_array = colorArrays[2]
+    green_array  = colorArrays[3]
+    blue_array   = colorArrays[4]
+    violet_array = colorArrays[5]
     
     
+
     make_bricks(brick_pos_y[0], red, red_array)
     make_bricks(brick_pos_y[1], orange, orange_array)
     make_bricks(brick_pos_y[2], yellow, yellow_array)
