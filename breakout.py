@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Importing the library 
 import pygame 
 import sys
