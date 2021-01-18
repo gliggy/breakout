@@ -15,6 +15,9 @@ pygame.display.set_caption('Breakout')
 # Initializing surface 
 surface = pygame.display.set_mode((710,500)) 
 
+programIcon = pygame.image.load('icon.png')
+pygame.display.set_icon(programIcon)
+
 font = pygame.font.SysFont('Tahoma', 60, True, False)
   
 # Initialing Color 
