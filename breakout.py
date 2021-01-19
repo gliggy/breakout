@@ -13,13 +13,13 @@ done = False
 pygame.display.set_caption('Breakout')
 
 # Initializing surface 
-surface = pygame.display.set_mode((710,500)) 
+surface = pygame.display.set_mode((710,540)) 
 
 # set icon
 programIcon = pygame.image.load('icon.png')
 pygame.display.set_icon(programIcon)
 
-font = pygame.font.SysFont('Tahoma', 60, True, False)
+font = pygame.font.SysFont('Nimbus Sans Bold', 70, True, False)
   
 # Initialing Color 
 red    = [255,0,0,255]
@@ -35,7 +35,7 @@ def make_bricks(height, color, number):
     direction = 1 if color_original == 0 else -1
     for x in number:
         if x == 1:
-            pygame.draw.rect(surface, color, pygame.Rect(left, height, 60, 30))
+            pygame.draw.rect(surface, color, pygame.Rect(left, height + 40, 60, 30))
             color[2] = (color[2] + direction * 10) % 256
             # print(color[color_changer])
         else:
@@ -54,6 +54,12 @@ def make_ball(x_pos_new, x_pos_old, y_pos_new, y_pos_old):
         print(pixel)
     pygame.draw.circle(surface, (0,0,0), (x_pos_old, y_pos_old), 20)
     pygame.draw.circle(surface, (255,255,0), (x_pos_new, y_pos_new), 20)
+
+def make_score(score):
+    pygame.draw.rect(surface, (0,0,0), pygame.Rect(0, 0, 710, 40))
+    score_write = font.render(score, 1, yellow)
+    # score_write.fill(yellow)
+    surface.blit(score_write, (100, 0))
 
 # set pos vars
 paddle_pos = 355
@@ -79,13 +85,13 @@ while not done:
     # Drawing Bricks 
     brick_pos_y = [10,50,90,130,170,210]
     
-    colorArrays = [[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1]]
-    red_array    = colorArrays[0]
-    orange_array = colorArrays[1]
-    yellow_array = colorArrays[2]
-    green_array  = colorArrays[3]
-    blue_array   = colorArrays[4]
-    violet_array = colorArrays[5]
+    # color arrays
+    red_array    = [1,1,1,1,1,1,1,1,1,1]
+    orange_array = [1,1,1,1,1,1,1,1,1,1]
+    yellow_array = [1,1,1,1,1,1,1,1,1,1]
+    green_array  = [1,1,1,1,1,1,1,1,1,1]
+    blue_array   = [1,1,1,1,1,1,1,1,1,1]
+    violet_array = [1,1,1,1,1,1,1,1,1,1]
     
     
 
@@ -111,12 +117,14 @@ while not done:
             ball_pos_y = 250
             [x,y] = pick_direction()
     
+    make_score(str(lives))
+    
     if ball_pos_y - 20 < 0:
         y = -y
 
-    if ball_pos_y < 220:
-        if 0 < ball_pos_x < 70 and violet_array[0] == 1:
-            violet_array[0] = 0
+    #if ball_pos_y < 220:
+     #   if 0 < ball_pos_x < 70 and violet_array[0] == 1:
+      #      violet_array[0] = 0
 
 
 
@@ -145,6 +153,8 @@ while not done:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 paddle_pos = paddle_pos
+    if lives < 0:
+        done = True
 
     make_paddle(paddle_pos, previous_paddle_pos)
     pygame.display.flip() 
