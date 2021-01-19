@@ -15,6 +15,7 @@ pygame.display.set_caption('Breakout')
 # Initializing surface 
 surface = pygame.display.set_mode((710,500)) 
 
+# set icon
 programIcon = pygame.image.load('icon.png')
 pygame.display.set_icon(programIcon)
 
@@ -35,7 +36,7 @@ def make_bricks(height, color, number):
     for x in number:
         if x == 1:
             pygame.draw.rect(surface, color, pygame.Rect(left, height, 60, 30))
-            color[2] = (color[2] + direction * 10) % 256;
+            color[2] = (color[2] + direction * 10) % 256
             # print(color[color_changer])
         else:
             pygame.draw.rect(surface, (0,0,0), pygame.Rect(left, height, 60, 30))
@@ -49,7 +50,8 @@ def make_paddle(x_pos_new, x_pos_old):
 
 def make_ball(x_pos_new, x_pos_old, y_pos_new, y_pos_old):
     pixel = surface.get_at((int(x_pos_new), int(y_pos_new)))
-    # print(pixel)
+    if pixel != (255,255,0,255):
+        print(pixel)
     pygame.draw.circle(surface, (0,0,0), (x_pos_old, y_pos_old), 20)
     pygame.draw.circle(surface, (255,255,0), (x_pos_new, y_pos_new), 20)
 
