@@ -1,0 +1,12 @@
+{
+    "red": 10,
+    "orange": "Smith",
+    "yellow": true,
+    "green": 27,
+    "blue": {
+      "x": "50",
+      "y": "50",
+      "color": "(0,0,255)"
+    },
+    "purple": true
+  }
