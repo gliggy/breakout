@@ -55,9 +55,9 @@ def make_ball(x_pos_new, x_pos_old, y_pos_new, y_pos_old):
     pygame.draw.circle(surface, (0,0,0), (x_pos_old, y_pos_old), 20)
     pygame.draw.circle(surface, (255,255,0), (x_pos_new, y_pos_new), 20)
 
-def make_score(score):
+def make_score(lives, score):
     pygame.draw.rect(surface, (0,0,0), pygame.Rect(0, 0, 710, 40))
-    score_write = font.render(score, 1, yellow)
+    score_write = font.render("Lives: " lives, 1, yellow)
     # score_write.fill(yellow)
     surface.blit(score_write, (100, 0))
 
