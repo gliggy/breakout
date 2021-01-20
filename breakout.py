@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Importing the library 
+
+# Importing the libraries 
 import pygame 
 import sys
 import random
@@ -90,7 +91,7 @@ while not done:
     brick_pos_y = [10,50,90,130,170,210]
     
     # color arrays
-    red_array    = [0,0,0,0,0,0,0,0,0,0]
+    red_array    = [1,1,1,1,1,1,1,1,1,1]
     orange_array = [1,1,1,1,1,1,1,1,1,1]
     yellow_array = [1,1,1,1,1,1,1,1,1,1]
     green_array  = [1,1,1,1,1,1,1,1,1,1]
