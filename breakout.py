@@ -37,26 +37,28 @@ def make_bricks(height, color, number):
     direction = 1 if color_original == 0 else -1
     for x in number:
         if x == 1:
-            pygame.draw.rect(surface, color, pygame.Rect(left, height + 40, 60, 30))
-            color[2] = (color[2] + direction * 10) % 256
+            pygame.draw.rect(surface, color, pygame.Rect(left, height, 60, 30))
+            color[2] = (color[2] + direction * 2) % 256
             # print(color[color_changer])
         else:
-            pygame.draw.rect(surface, (0,0,0), pygame.Rect(left, height + 40, 60, 30))
+            pygame.draw.rect(surface, (0,0,0), pygame.Rect(left, height, 60, 30))
         left += 70
     color[2] = color_original
 
 def remove_brick(ball_x):
     remove = []
     left = 5
-    number = 10
+    number = [0,1,2,3,4,5,6,7,8,9]
     array_pos = 0
     for x in number:
         if ball_x in range(left, left + 65):
             remove.append(array_pos)
+        else:
+            remove.append(1)
         left += 65
         array_pos += 1
+    return remove
     
-
 
 def make_paddle(x_pos_new, x_pos_old):
     pygame.draw.rect(surface, (0,0,0), pygame.Rect(x_pos_old - 55, 480, 110, 10))
@@ -68,8 +70,7 @@ def make_ball(x_pos_new, x_pos_old, y_pos_new, y_pos_old):
     pixel = surface.get_at((int(x_pos_new), int(y_pos_new)))
     if pixel != (255,255,0,255):
         b = pixel[2]
-        print(b)
-
+        #print(b)
     pygame.draw.circle(surface, (0,0,0), (x_pos_old, y_pos_old), 20)
     pygame.draw.circle(surface, (255,255,0), (x_pos_new, y_pos_new), 20)
 
@@ -114,7 +115,7 @@ violet_array = [1,1,1,1,1,1,1,1,1,1]
 
 while not done:  
     # Drawing Bricks 
-    brick_pos_y = [10,50,90,130,170,210]    
+    brick_pos_y = [50,90,130,170,210,250]    
 
     make_bricks(brick_pos_y[0], red, red_array)
     make_bricks(brick_pos_y[1], orange, orange_array)
@@ -145,9 +146,25 @@ while not done:
     elif ball_pos_y - 20 < 0:
         y = -y
 
-    if 50 < ball_pos_y < 100 and b != [0]:
-        red_array[5] = 0
-
+    # erase bricks
+    if brick_pos_y[4] < ball_pos_y < brick_pos_y[5]:
+        for i in remove_brick(ball_pos_x):
+            violet_array[i] = 0
+    elif brick_pos_y[3] < ball_pos_y < brick_pos_y[4]:
+        for i in remove_brick(ball_pos_x):
+            blue_array[i] = 0
+    elif brick_pos_y[2] < ball_pos_y < brick_pos_y[3]:
+        for i in remove_brick(ball_pos_x):
+            green_array[i] = 0
+    elif brick_pos_y[1] < ball_pos_y < brick_pos_y[2]:
+        for i in remove_brick(ball_pos_x):
+            yellow_array[i] = 0
+    elif brick_pos_y[0] < ball_pos_y < brick_pos_y[1]:
+        for i in remove_brick(ball_pos_x):
+            orange_array[i] = 0
+    elif ball_pos_y < brick_pos_y[0]:
+        for i in remove_brick(ball_pos_x):
+            red_array[i] = 0
 
     previous_ball_pos_x = ball_pos_x
     previous_ball_pos_y = ball_pos_y
