@@ -41,7 +41,7 @@ def make_bricks(height, color, number):
             color[2] = (color[2] + direction * 10) % 256
             # print(color[color_changer])
         else:
-            pygame.draw.rect(surface, (0,0,0), pygame.Rect(left, height, 60, 30))
+            pygame.draw.rect(surface, (0,0,0), pygame.Rect(left, height + 40, 60, 30))
         left += 70
     color[2] = color_original
         
@@ -49,6 +49,8 @@ def make_bricks(height, color, number):
 def make_paddle(x_pos_new, x_pos_old):
     pygame.draw.rect(surface, (0,0,0), pygame.Rect(x_pos_old - 55, 480, 110, 10))
     pygame.draw.rect(surface, (255,255,0), pygame.Rect(x_pos_new - 55, 480, 110, 10))
+
+b = 0
 
 def make_ball(x_pos_new, x_pos_old, y_pos_new, y_pos_old):
     pixel = surface.get_at((int(x_pos_new), int(y_pos_new)))
@@ -87,19 +89,20 @@ def pick_direction():
 lives = 5
 score = 0
 
+# clear screen
+pygame.draw.rect(surface, (0,0,0), pygame.Rect(0, 0, 710, 540))
+
+# color arrays
+red_array    = [1,1,1,1,1,1,1,1,1,1]
+orange_array = [1,1,1,1,1,1,1,1,1,1]
+yellow_array = [1,1,1,1,1,1,1,1,1,1]
+green_array  = [1,1,1,1,1,1,1,1,1,1]
+blue_array   = [1,1,1,1,1,1,1,1,1,1]
+violet_array = [1,1,1,1,1,1,1,1,1,1]
+
 while not done:  
     # Drawing Bricks 
-    brick_pos_y = [10,50,90,130,170,210]
-    
-    # color arrays
-    red_array    = [1,1,1,1,1,1,1,1,1,1]
-    orange_array = [1,1,1,1,1,1,1,1,1,1]
-    yellow_array = [1,1,1,1,1,1,1,1,1,1]
-    green_array  = [1,1,1,1,1,1,1,1,1,1]
-    blue_array   = [1,1,1,1,1,1,1,1,1,1]
-    violet_array = [1,1,1,1,1,1,1,1,1,1]
-    
-    
+    brick_pos_y = [10,50,90,130,170,210]    
 
     make_bricks(brick_pos_y[0], red, red_array)
     make_bricks(brick_pos_y[1], orange, orange_array)
@@ -130,10 +133,8 @@ while not done:
     elif ball_pos_y - 20 < 0:
         y = -y
 
-    #if ball_pos_y < 220:
-     #   if 0 < ball_pos_x < 70 and violet_array[0] == 1:
-      #      violet_array[0] = 0
-
+    if 50 < ball_pos_y < 100 and b != [0]:
+        red_array[5] = 0
 
 
     previous_ball_pos_x = ball_pos_x
