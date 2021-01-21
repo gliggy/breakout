@@ -44,7 +44,19 @@ def make_bricks(height, color, number):
             pygame.draw.rect(surface, (0,0,0), pygame.Rect(left, height + 40, 60, 30))
         left += 70
     color[2] = color_original
-        
+
+def remove_brick(ball_x):
+    remove = []
+    left = 5
+    number = 10
+    array_pos = 0
+    for x in number:
+        if ball_x in range(left, left + 65):
+            remove.append(array_pos)
+        left += 65
+        array_pos += 1
+    
+
 
 def make_paddle(x_pos_new, x_pos_old):
     pygame.draw.rect(surface, (0,0,0), pygame.Rect(x_pos_old - 55, 480, 110, 10))
