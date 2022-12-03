@@ -4,6 +4,10 @@ pygame.init()
 fps=30
 fpsclock=pygame.time.Clock()
 sur_obj=pygame.display.set_mode((400,300))
+
+cursor_args = pygame.cursors.load_xbm("fish5.xbm", )
+cursor = pygame.mouse.set_cursor(cursor_args)
+
 pygame.display.set_caption("Keyboard_Input")
 White=(255,255,255)
 p1=10
