@@ -24,7 +24,7 @@ brick_amount = 10
 rows = 7
 screen_width = (brick_amount*brick_width + (brick_amount+1)*gap)
 screen_height = 2*(rows*brick_height + (rows+1)*gap) # 580
-score_width = 160
+score_width = 200
 score_height = 40
 paddle_hover = 50
 
@@ -85,10 +85,13 @@ ball_pos_y = screen_height/2 - ball_size/2
 # x and y are the incremental steps
 x = 0
 y = 0
-speed = 5
+speed = 10
 
 def pick_direction():
-    angle = (random.random()*0.6 + 0.2)*math.pi
+    random_angle = random.random()*0.6 + 0.2
+    while (0.4 < random_angle < 0.6):
+        random_angle = random.random()*0.6 + 0.2
+    angle = random_angle*math.pi
     x = math.cos(angle)*speed
     y = math.sin(angle)*speed
     return [x,y]
@@ -105,7 +108,6 @@ pygame.draw.rect(surface, (0,0,0), pygame.Rect(0, 0, screen_width, screen_height
 #colorArrays = [[1] * brick_amount] * 6
 colorArrays = [[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1]]
 
-
 while not done:
     red_array    = colorArrays[0]
     orange_array = colorArrays[1]
@@ -120,12 +122,6 @@ while not done:
 
     for i in range(len(colorArrays)):
         make_bricks(((score_height + gap) + (brick_height + gap)*i), colors[i], colorArrays[i])
-    #make_bricks(brick_pos_y[0], red, red_array)
-    #make_bricks(brick_pos_y[1], orange, orange_array)
-    #make_bricks(brick_pos_y[2], yellow, yellow_array)
-    #make_bricks(brick_pos_y[3], green, green_array)
-    #make_bricks(brick_pos_y[4], blue, blue_array)
-    #make_bricks(brick_pos_y[5], violet, violet_array)
 
     if ball_pos_x + 20 > 710 or ball_pos_x - 20 < 0:
         x = -x
@@ -145,8 +141,10 @@ while not done:
         if ball_pos_y + 20 > screen_height - paddle_hover + 20:
             lives -= 1
             pygame.draw.circle(surface, (0,0,0), (ball_pos_x, ball_pos_y), 20)
+            pygame.draw.rect(surface, (0,0,0), pygame.Rect(paddle_pos - paddle_width/2, screen_height - paddle_hover, paddle_width, 10))
             ball_pos_x = screen_width/2 - ball_size/2
             ball_pos_y = screen_height/2 - ball_size/2
+            paddle_pos = screen_width/2 - paddle_width/2
             [x,y] = pick_direction()
 
     make_score(str(lives), str(score))
@@ -159,6 +157,7 @@ while not done:
         v = colorArrays[rem_brick_shift][rem_brick[0]]
         colorArrays[rem_brick_shift][rem_brick[0]] = 0
     if v != 0:
+            score += 7 - rem_brick[1]
             y = -y
 
     previous_ball_pos_x = ball_pos_x
@@ -167,12 +166,9 @@ while not done:
     ball_pos_y += y
     make_ball(ball_pos_x, previous_ball_pos_x, ball_pos_y, previous_ball_pos_y)
 
-    #print(lives)    
-    #display_lives = font.render(lives, True, (255,255,255))
-
     # draw and quit
     previous_paddle_pos = paddle_pos
-    paddle_speed = 8
+    paddle_speed = 10
 
     #key_input = pygame.key.get_pressed()
     keys = pygame.key.get_pressed()
