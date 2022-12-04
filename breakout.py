@@ -2,10 +2,12 @@
 
 # Importing the libraries 
 import pygame 
+from pygame.locals import *
 import sys
 import random
 import math
 import json 
+import time
   
 # Initializing Pygame 
 pygame.init() 
@@ -14,13 +16,56 @@ fpsclock=pygame.time.Clock()
 done = False
 pygame.display.set_caption('Breakout')
 
+# Initialing Color 
+red    = [255,0,0,255]
+orange = [255,128,0,255]
+yellow = [255,255,0,255]
+green  = [0,255,0,255]
+blue   = [0,0,255,255]
+violet = [191,0,255,255] 
+gray   = [200, 200, 200]
+
+surface = pygame.display.set_mode((700, 300))
+
+def get_input(prompt, color):
+    input = ""
+    font = pygame.font.SysFont(None, 48)
+    img = font.render(prompt, True, color)
+    rect = img.get_rect()
+    rect.topleft = (20, 20)
+    cursor = Rect(rect.topright, (3, rect.height))
+    inputting = True
+    background = gray
+    while inputting:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+            if event.type == KEYDOWN:
+                if event.key == K_BACKSPACE:
+                    if len(input)>0:
+                        input = input[:-1]
+                elif event.key == K_RETURN:
+                    inputting = False
+                elif event.unicode.isdigit():
+                    input += event.unicode
+                img = font.render(prompt + input, True, color)
+                rect.size=img.get_size()
+                cursor.topleft = rect.topright
+    
+        surface.fill(background)
+        surface.blit(img, rect)
+        if time.time() % 1 > 0.5:
+            pygame.draw.rect(surface, color, cursor)
+        pygame.display.update()
+    return int(input)
+
 # units
-ball_size = 20
+ball_size = get_input("Ball size: ", violet)
 paddle_width = 120
 brick_width = 60
 brick_height = 30
 gap = 10
-brick_amount = 10
+brick_amount = get_input("Number of columns: ", red)
 rows = 7
 screen_width = (brick_amount*brick_width + (brick_amount+1)*gap)
 screen_height = 2*(rows*brick_height + (rows+1)*gap) # 580
@@ -36,14 +81,6 @@ programIcon = pygame.image.load('icon.png')
 pygame.display.set_icon(programIcon)
 
 font = pygame.font.SysFont('Nimbus Sans Bold', 48, True, False)
-  
-# Initialing Color 
-red    = [255,0,0,255]
-orange = [255,128,0,255]
-yellow = [255,255,0,255]
-green  = [0,255,0,255]
-blue   = [0,0,255,255]
-violet = [191,0,255,255] 
 
 def make_bricks(height, color, number):
     left = gap
@@ -106,7 +143,9 @@ pygame.draw.rect(surface, (0,0,0), pygame.Rect(0, 0, screen_width, screen_height
 
 # color arrays
 #colorArrays = [[1] * brick_amount] * 6
-colorArrays = [[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1]]
+#rows, cols = (5, 5)
+colorArrays = [[1 for i in range(brick_amount + 1)] for j in range(6)]
+#colorArrays = [[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1,1,1]]
 
 while not done:
     red_array    = colorArrays[0]
@@ -123,14 +162,14 @@ while not done:
     for i in range(len(colorArrays)):
         make_bricks(((score_height + gap) + (brick_height + gap)*i), colors[i], colorArrays[i])
 
-    if ball_pos_x + 20 > 710 or ball_pos_x - 20 < 0:
+    if ball_pos_x + ball_size > screen_width or ball_pos_x - ball_size < 0:
         x = -x
-    if ball_pos_y - 20 < 0:
+    if ball_pos_y - ball_size < 0:
         y = -y
 
     # make the ball bounce on the paddle
-    if ball_pos_y + 20 > screen_height - paddle_hover:
-        if ball_pos_y + 20 < screen_height - paddle_hover + 10:
+    if ball_pos_y + ball_size > screen_height - paddle_hover:
+        if ball_pos_y + ball_size < screen_height - paddle_hover + 10:
             if paddle_pos - 70 < ball_pos_x < paddle_pos + 70:
                 y = -y
                 if not(paddle_pos - 25 < ball_pos_x < paddle_pos + 25):
@@ -138,9 +177,9 @@ while not done:
                     moving_right = x > 0
                     if hit_right != moving_right:
                         x = -x
-        if ball_pos_y + 20 > screen_height - paddle_hover + 20:
+        if ball_pos_y + ball_size > screen_height - paddle_hover + 20:
             lives -= 1
-            pygame.draw.circle(surface, (0,0,0), (ball_pos_x, ball_pos_y), 20)
+            pygame.draw.circle(surface, (0,0,0), (ball_pos_x, ball_pos_y), ball_size)
             pygame.draw.rect(surface, (0,0,0), pygame.Rect(paddle_pos - paddle_width/2, screen_height - paddle_hover, paddle_width, 10))
             ball_pos_x = screen_width/2 - ball_size/2
             ball_pos_y = screen_height/2 - ball_size/2
